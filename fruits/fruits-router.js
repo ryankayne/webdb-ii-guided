@@ -1,7 +1,7 @@
 const express = require('express');
 const knex = require('knex');
 
-const db = knex({
+const knexConfiguration = knex({
   client: 'sqlite3',
   connection: {
     filename: './data/produce.db3'
@@ -9,9 +9,13 @@ const db = knex({
   useNullAsDefault: true
 });
 
+const db = knex(knexConfiguration);
+
 const router = express.Router();
 
 router.get('/', (req, res) => {
+  // select * from fruits
+  // db.select('*').from('fruits').then().catch();
   db('fruits')
   .then(fruits => {
     res.json(fruits); 
@@ -23,8 +27,11 @@ router.get('/', (req, res) => {
 
 router.get('/:id', (req, res) => {
   const { id } = req.params;
+  // select * from fruits where id = 2;
 
-  db('fruits').where({ id }).first()
+  db('fruits')
+  // 
+  .where({ id }).first()
   .then(fruit => {
     res.json(fruit);
   }) 
